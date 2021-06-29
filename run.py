@@ -8,14 +8,6 @@ from email.utils import parseaddr, formataddr
 import time
 import smtplib
 
-# 商品关注列表
-I_want_them = [
-    "cage",
-    "pop",
-    "kelly"
-]
-
-
 def _format_addr(s):
     name, addr = parseaddr(s)
     return formataddr((Header(name, 'utf-8').encode(), addr))
@@ -48,8 +40,13 @@ def send_email(text, link):
     server.quit()
 
 
-def crawl(url):
+def crawl(url, type):
     # 项链
+    # 商品关注列表
+    I_want_them = {
+        "项链": ["pop"]
+    }
+
     r = requests.get(url)
     content = r.content
     soup = BeautifulSoup(content, 'lxml')
@@ -58,16 +55,25 @@ def crawl(url):
         # print(li)
         text = li.text.lower()
         if "¥" in text:
-            for th in I_want_them:
+            for th in I_want_them[type]:
+                print("监测内容：", type, th)
                 if th in text:
                     print(li.text)
                     link = li.get("href")
                     link = "https://www.hermes.cn" + link
                     send_email(li.text, link)
-                    time.sleep(30)
+                    time.sleep(10)
                     # break
+    time.sleep(1)
 
 
 if __name__ == "__main__":
-    crawl("https://www.hermes.cn/cn/zh/category/%E5%A5%B3%E5%A3%AB/%E6%97%B6%E5%B0%9A%E9%A6%96%E9%A5%B0/%E9%A1%B9%E9%93%BE%E5%9D%A0%E9%A5%B0/#||%E7%B1%BB%E5%88%AB")
-    # crawl("https://www.hermes.cn/cn/zh/category/%E5%A5%B3%E5%A3%AB/%E6%97%B6%E5%B0%9A%E9%A6%96%E9%A5%B0/%E8%80%B3%E7%8E%AF/#||%E6%9D%90%E8%B4%A8")
+    cnt = 0
+    while True:
+        crawl("https://www.hermes.cn/cn/zh/category/%E5%A5%B3%E5%A3%AB/%E6%97%B6%E5%B0%9A%E9%A6%96%E9%A5%B0/%E9%A1%B9%E9%93%BE%E5%9D%A0%E9%A5%B0/#||%E7%B1%BB%E5%88%AB", "项链")
+        # crawl("https://www.hermes.cn/cn/zh/category/%E5%A5%B3%E5%A3%AB/%E6%97%B6%E5%B0%9A%E9%A6%96%E9%A5%B0/%E8%80%B3%E7%8E%AF/#||%E6%9D%90%E8%B4%A8", "耳钉")
+        cnt += 1
+        print(f"执行中 ... 循环爬取{cnt}次 ...")
+        time.sleep(20)
+
+# https://www.hermes.cn/cn/zh/product/mini-pop-h%E8%80%B3%E7%8E%AF-H608002FP49/
