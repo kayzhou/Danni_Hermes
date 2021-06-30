@@ -41,6 +41,10 @@ def send_email(text, link):
     server.quit()
 
 
+def crawl_item(url, type):
+    return 0
+
+    
 def crawl(url, type):
     # 项链
     # 商品关注列表
