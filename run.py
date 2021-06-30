@@ -124,6 +124,3 @@ if __name__ == "__main__":
             time.sleep(3)
         cnt += 1
         print(f"执行中 ... 循环爬取{cnt}次 ...")
-
-# https://www.hermes.cn/cn/zh/product/mini-pop-h%E8%80%B3%E7%8E%AF-H608002FP49/
-# https://www.hermes.cn/cn/zh/product/pop-h%E9%A1%B9%E9%93%BE-H147992FO55/
